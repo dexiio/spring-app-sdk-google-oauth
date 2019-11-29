@@ -6,7 +6,7 @@
 
     <groupId>io.dexi</groupId>
     <artifactId>spring-app-google-oauth</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

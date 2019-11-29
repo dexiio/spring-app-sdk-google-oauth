@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Configuration
-@ConfigurationProperties(prefix = "google",ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "google")
 @DependsOn("dexiConfigWrapper")
 public class GoogleOAuthProperties {
 
