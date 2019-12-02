@@ -44,6 +44,10 @@ public class GoogleService {
         this.transport = GoogleNetHttpTransport.newTrustedTransport();
         this.properties = properties;
         properties.validate();
+
+        log.info("Initialising Google Service with app name: {}", properties.getAppName());
+        log.info("- Google Scopes: {}", properties.getScopes());
+        log.info("- Google Client Id: {}", properties.getClientId());
     }
 
     public URL getRedirectUrl(String state, String returnUrl) {
