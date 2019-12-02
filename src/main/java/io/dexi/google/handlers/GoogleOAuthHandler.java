@@ -1,8 +1,9 @@
-package io.dexi.google;
+package io.dexi.google.handlers;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.plus.model.Person;
+import io.dexi.google.GoogleService;
 import io.dexi.oauth.OAuthTokens;
 import io.dexi.service.exceptions.UserErrorException;
 import io.dexi.service.handlers.OAuthHandler;
