@@ -4,9 +4,9 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.plus.model.Person;
 import io.dexi.google.GoogleService;
-import io.dexi.oauth.OAuthTokens;
+import io.dexi.oauth.OAuth2Tokens;
 import io.dexi.service.exceptions.UserErrorException;
-import io.dexi.service.handlers.OAuthHandler;
+import io.dexi.service.handlers.OAuth2Handler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.net.URL;
 
 @Slf4j
 @Service
-public class GoogleOAuthHandler implements OAuthHandler {
+public class GoogleOAuthHandler implements OAuth2Handler {
 
     private static final String OAUTH_PROVIDER = "google";
 
@@ -44,7 +44,7 @@ public class GoogleOAuthHandler implements OAuthHandler {
 
 
     @Override
-    public OAuthTokens validate(String code, String redirectUri) {
+    public OAuth2Tokens validate(String code, String redirectUri) {
         try {
             final GoogleTokenResponse response = googleService.getTokenResponse(code, redirectUri);
 
@@ -52,7 +52,7 @@ public class GoogleOAuthHandler implements OAuthHandler {
                 return null;
             }
 
-            OAuthTokens out = new OAuthTokens();
+            OAuth2Tokens out = new OAuth2Tokens();
             out.setProvider(OAUTH_PROVIDER);
             out.setValid(true);
             out.setAccessToken(response.getAccessToken());

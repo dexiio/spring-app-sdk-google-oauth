@@ -16,7 +16,7 @@ import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.client.util.store.MemoryDataStoreFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
-import io.dexi.oauth.OAuthTokens;
+import io.dexi.oauth.OAuth2Tokens;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
@@ -75,14 +75,14 @@ public class GoogleService {
         ).execute();
     }
 
-    public Person getUser(OAuthTokens tokens) throws IOException {
+    public Person getUser(OAuth2Tokens tokens) throws IOException {
         Plus plus = createClient(tokens);
 
         return plus.people().get("me").execute();
 
     }
 
-    private Plus createClient(OAuthTokens tokens) {
+    private Plus createClient(OAuth2Tokens tokens) {
 
         final Credential credentials = createCredentials(tokens);
 
@@ -105,7 +105,7 @@ public class GoogleService {
         return createAuthFlowBuilder().build();
     }
 
-    private GoogleAuthorizationCodeFlow createAuthFlow(OAuthTokens config) throws IOException {
+    private GoogleAuthorizationCodeFlow createAuthFlow(OAuth2Tokens config) throws IOException {
         return createAuthFlowBuilder()
                 .addRefreshListener(new CredentialRefreshListener() {
                     @Override
@@ -122,7 +122,7 @@ public class GoogleService {
                 }).build();
     }
 
-    private TokenResponse toTokenResponse(OAuthTokens config) {
+    private TokenResponse toTokenResponse(OAuth2Tokens config) {
         final TokenResponse tokenResponse = new TokenResponse();
         tokenResponse.setAccessToken(config.getAccessToken());
         tokenResponse.setRefreshToken(config.getRefreshToken());
@@ -132,7 +132,7 @@ public class GoogleService {
         return tokenResponse;
     }
 
-    public Credential createCredentials(OAuthTokens config) {
+    public Credential createCredentials(OAuth2Tokens config) {
 
         final GoogleAuthorizationCodeFlow authFlow;
         try {
