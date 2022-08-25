@@ -60,7 +60,7 @@ public class GoogleOAuthHandler implements OAuth2Handler {
             out.setExpiresInSeconds(response.getExpiresInSeconds());
             out.setScope(response.getScope());
 
-            final Person user = googleService.getUser(out);
+            final Person user = googleService.getUser(out, false);
 
             for(Person.Emails email : user.getEmails()) {
                 if ("account".equalsIgnoreCase(email.getType())) {
