@@ -28,6 +28,9 @@ public class GoogleOAuthProperties {
 
     @NotBlank
     private String appKey;
+
+    private String mozendaClientId;
+    private String mozendaSecret;
     
     void validate() {
         if (StringUtils.isBlank(appName)) {
@@ -48,6 +51,10 @@ public class GoogleOAuthProperties {
 
         if (StringUtils.isBlank(appKey)) {
             throw new IllegalArgumentException("Missing required configuration property: google.app-key");
+        }
+
+        if (StringUtils.isNotEmpty(mozendaClientId) && StringUtils.isEmpty(mozendaSecret)) {
+            throw new IllegalArgumentException("Missing required configuration property: google.mozenda-secret");
         }
     }
 
@@ -75,12 +82,28 @@ public class GoogleOAuthProperties {
         this.clientId = clientId;
     }
 
+    public String getMozendaClientId() {
+        return mozendaClientId;
+    }
+
+    public void setMozendaClientId(String clientId) {
+        this.mozendaClientId = clientId;
+    }
+
     public String getSecret() {
         return secret;
     }
 
     public void setSecret(String secret) {
         this.secret = secret;
+    }
+
+    public String getMozendaSecret() {
+        return mozendaSecret;
+    }
+
+    public void setMozendaSecret(String secret) {
+        this.mozendaSecret = secret;
     }
 
     public String getAppKey() {

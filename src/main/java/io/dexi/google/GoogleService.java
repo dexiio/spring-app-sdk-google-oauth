@@ -75,38 +75,50 @@ public class GoogleService {
         ).execute();
     }
 
-    public Person getUser(OAuth2Tokens tokens) throws IOException {
-        Plus plus = createClient(tokens);
+    public Person getUser(OAuth2Tokens tokens, boolean isMozenda) throws IOException {
+        Plus plus = createClient(tokens, isMozenda);
 
         return plus.people().get("me").execute();
 
     }
 
-    private Plus createClient(OAuth2Tokens tokens) {
+    private Plus createClient(OAuth2Tokens tokens, boolean isMozenda) {
 
-        final Credential credentials = createCredentials(tokens);
+        final Credential credentials = createCredentials(tokens, isMozenda);
 
         return new Plus.Builder(transport, jacksonFactory, credentials)
                 .setApplicationName(properties.getAppName())
                 .build();
     }
 
-    private GoogleAuthorizationCodeFlow.Builder createAuthFlowBuilder() throws IOException {
-        return new GoogleAuthorizationCodeFlow.Builder(
-                transport,
-                jacksonFactory,
-                properties.getClientId(),
-                properties.getSecret(),
-                properties.getScopes()
-        ).setDataStoreFactory(dataStoreFactory);
+    private GoogleAuthorizationCodeFlow.Builder createAuthFlowBuilder(boolean isMozenda) throws IOException {
+
+        if (isMozenda) {
+            return new GoogleAuthorizationCodeFlow.Builder(
+                    transport,
+                    jacksonFactory,
+                    properties.getMozendaClientId(),
+                    properties.getMozendaSecret(),
+                    properties.getScopes()
+            ).setDataStoreFactory(dataStoreFactory);
+        }
+        else {
+            return new GoogleAuthorizationCodeFlow.Builder(
+                    transport,
+                    jacksonFactory,
+                    properties.getClientId(),
+                    properties.getSecret(),
+                    properties.getScopes()
+            ).setDataStoreFactory(dataStoreFactory);
+        }
     }
 
-    private GoogleAuthorizationCodeFlow createAuthFlow() throws IOException {
-        return createAuthFlowBuilder().build();
+    private GoogleAuthorizationCodeFlow createAuthFlow(boolean isMozenda) throws IOException {
+        return createAuthFlowBuilder(isMozenda).build();
     }
 
-    private GoogleAuthorizationCodeFlow createAuthFlow(OAuth2Tokens config) throws IOException {
-        return createAuthFlowBuilder()
+    private GoogleAuthorizationCodeFlow createAuthFlow(OAuth2Tokens config, boolean isMozenda) throws IOException {
+        return createAuthFlowBuilder(isMozenda)
                 .addRefreshListener(new CredentialRefreshListener() {
                     @Override
                     public void onTokenResponse(Credential credential, TokenResponse tokenResponse) throws IOException {
@@ -132,11 +144,11 @@ public class GoogleService {
         return tokenResponse;
     }
 
-    public Credential createCredentials(OAuth2Tokens config) {
+    public Credential createCredentials(OAuth2Tokens config, boolean isMozenda) {
 
         final GoogleAuthorizationCodeFlow authFlow;
         try {
-            authFlow = createAuthFlow(config);
+            authFlow = createAuthFlow(config, isMozenda);
         } catch (IOException e) {
             throw new IllegalStateException("Failed to create Google OAuth flow", e);
         }
